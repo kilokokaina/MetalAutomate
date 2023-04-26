@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Map;
 
 @Data
 @Entity
@@ -15,6 +15,7 @@ public class Construction {
     private Long id;
 
     private String constName;
+    private String constDescribe;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -22,7 +23,7 @@ public class Construction {
             joinColumns = { @JoinColumn(name = "const_id") },
             inverseJoinColumns = { @JoinColumn(name = "detail_id") }
     )
-    private List<Detail> detailList;
+    private Map<Integer, Detail> detailList;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -30,10 +31,12 @@ public class Construction {
             joinColumns = { @JoinColumn(name = "const_id") },
             inverseJoinColumns = { @JoinColumn(name = "item_id") }
     )
-    private List<Item> itemList;
+    private Map<Integer, Item> itemList;
 
-    public Construction(String constName, List<Detail> detailList, List<Item> itemList) {
+    public Construction(String constName, String constDescribe,
+                        Map<Integer, Detail> detailList, Map<Integer, Item> itemList) {
         this.constName = constName;
+        this.constDescribe = constDescribe;
         this.detailList = detailList;
         this.itemList = itemList;
     }
@@ -43,6 +46,7 @@ public class Construction {
         return String.format("""
                 {
                 Construction name: %s;
+                Construction describe: %s;
                 Item's list: {
                 %s
                 };
@@ -51,6 +55,7 @@ public class Construction {
                 };
                 }
                         """, getConstName(),
+                getConstDescribe(),
                 getItemList().toString(),
                 getDetailList().toString()
         );

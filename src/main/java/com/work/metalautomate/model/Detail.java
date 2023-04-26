@@ -18,12 +18,9 @@ public class Detail {
     private String detailName;
     private String detailDescribe;
 
-    private int detailQuantity;
-
-    public Detail(String detailName, String detailDescribe, int detailQuantity) {
+    public Detail(String detailName, String detailDescribe) {
         this.detailName = detailName;
         this.detailDescribe = detailDescribe;
-        this.detailQuantity = detailQuantity;
     }
 
     @Override
@@ -31,10 +28,8 @@ public class Detail {
         return String.format("""
                 Detail name: %s;
                 Detail description: %s;
-                Detail quantity: %d;
                 """, getDetailName(),
-                getDetailDescribe(),
-                getDetailQuantity()
+                getDetailDescribe()
         );
     }
 }
