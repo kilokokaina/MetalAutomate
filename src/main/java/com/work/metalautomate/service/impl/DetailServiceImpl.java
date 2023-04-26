@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DetailServiceImpl implements DetailService {
-    private final DetailRepository detailRepository;
+    public final DetailRepository detailRepository;
 
     @Autowired
     public DetailServiceImpl(DetailRepository detailRepository) {
