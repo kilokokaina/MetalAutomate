@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Map;
+import java.util.List;
 
 @Data
 @Entity
@@ -23,9 +23,10 @@ public class Item {
             joinColumns = { @JoinColumn(name = "item_id") },
             inverseJoinColumns = { @JoinColumn(name = "detail_id") }
     )
-    private Map<Integer, Detail> detailList;
+    private List<Detail> detailList;
 
-    public Item(String itemName, String itemDescribe, Map<Integer, Detail> detailList) {
+
+    public Item(String itemName, String itemDescribe, List<Detail> detailList) {
         this.itemName = itemName;
         this.itemDescribe = itemDescribe;
         this.detailList = detailList;
@@ -33,13 +34,8 @@ public class Item {
 
     @Override
     public String toString() {
-        return String.format("""
-                Item name: %s;
-                Item describe: %s;
-                Detail's list: {
-                %s
-                };
-                """, getItemName(),
+        return String.format("Item's name: %s, Item's describe: %s, Detail's list: { %s }",
+                getItemName(),
                 getItemDescribe(),
                 getDetailList().toString()
         );

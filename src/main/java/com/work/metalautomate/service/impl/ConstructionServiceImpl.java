@@ -1,10 +1,13 @@
 package com.work.metalautomate.service.impl;
 
 import com.work.metalautomate.model.Construction;
+import com.work.metalautomate.model.Detail;
 import com.work.metalautomate.repo.ConstructionRepository;
 import com.work.metalautomate.service.ConstructionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ConstructionServiceImpl implements ConstructionService {
@@ -34,5 +37,9 @@ public class ConstructionServiceImpl implements ConstructionService {
     @Override
     public void deleteById(Long id) {
         constructionRepository.deleteById(id);
+    }
+
+    public List<Detail> findSeveralByName(String detailName) {
+        return constructionRepository.findSeveralByName(detailName);
     }
 }

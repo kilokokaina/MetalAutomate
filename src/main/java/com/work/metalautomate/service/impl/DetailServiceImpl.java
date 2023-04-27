@@ -6,6 +6,8 @@ import com.work.metalautomate.service.DetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DetailServiceImpl implements DetailService {
     public final DetailRepository detailRepository;
@@ -34,5 +36,9 @@ public class DetailServiceImpl implements DetailService {
     @Override
     public void deleteById(Long id) {
         detailRepository.deleteById(id);
+    }
+
+    public List<Detail> findSeveralByName(String detailName) {
+        return detailRepository.findSeveralByName(detailName);
     }
 }

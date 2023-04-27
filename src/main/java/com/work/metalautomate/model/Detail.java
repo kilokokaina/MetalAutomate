@@ -25,10 +25,8 @@ public class Detail {
 
     @Override
     public String toString() {
-        return String.format("""
-                Detail name: %s;
-                Detail description: %s;
-                """, getDetailName(),
+        return String.format("Detail's name: %s, Detail's description: %s",
+                getDetailName(),
                 getDetailDescribe()
         );
     }
