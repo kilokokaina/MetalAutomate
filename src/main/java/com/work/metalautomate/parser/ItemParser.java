@@ -19,7 +19,7 @@ import java.util.Objects;
 
 @Slf4j
 @Component
-public class ItemParser /*implements CommandLineRunner*/ {
+public class ItemParser implements CommandLineRunner {
     private final DetailServiceImpl detailService;
     private final ItemServiceImpl itemService;
 
@@ -29,16 +29,46 @@ public class ItemParser /*implements CommandLineRunner*/ {
         this.itemService = itemService;
     }
 
-//    @Override
+    public Detail getDetail(String line) {
+        String[] detailText = line.split(" ");
+
+        String detailDescribe = "";
+        String detailName = detailText[0].replace("_", " ");
+
+        if (detailText.length == 2) detailDescribe = detailText[1].replace("_", " ");
+
+        List<Detail> detailCompare = detailService.findSeveralByName(detailName);
+        boolean createNewDetail = true;
+
+        Detail detailModel = null;
+
+        if (detailCompare.size() != 0) {
+            for (Detail detail : detailCompare) {
+                if (detail.getDetailDescribe().equals(detailDescribe)) {
+                    detailModel = detail;
+                    createNewDetail = false;
+                    break;
+                }
+            }
+        }
+
+        if (createNewDetail) {
+            detailModel = new Detail(detailName, detailDescribe);
+            detailService.save(detailModel);
+        }
+
+        return detailModel;
+    }
+
+    @Override
     public void run(String... args) {
         File itemDir = new File("/Users/nikol/Desktop/details/item");
+
         for (File item : Objects.requireNonNull(itemDir.listFiles(File::isFile))) {
             String itemText = item.getName().replace(".txt", "");
 
             String itemName = itemText.split(" ")[0].replace("_", " ");
             String itemDescribe = itemText.split(" ")[1].replace("_", " ");
-
-            log.info(itemName + ", " + itemDescribe + " [");
 
             Item itemModel = new Item();
             itemModel.setItemName(itemName);
@@ -46,45 +76,17 @@ public class ItemParser /*implements CommandLineRunner*/ {
 
             List<Detail> detailList = new ArrayList<>();
 
-            try (BufferedReader bufferedReader = new BufferedReader(new FileReader(item))) {
+            try(BufferedReader bufferedReader = new BufferedReader(new FileReader(item))) {
                 String line;
 
                 while((line = bufferedReader.readLine()) != null) {
-                    String[] detailText = line.split(" ");
-
-                    String detailDescribe = "";
-                    String detailName = detailText[0].replace("_", " ");
-
-                    if (detailText.length == 2) detailDescribe = detailText[1].replace("_", " ");
-
-                    List<Detail> detailCompare = detailService.findSeveralByName(detailName);
-                    boolean createNewDetail = true;
-
-                    if (detailCompare.size() != 0) {
-                        for (Detail detail : detailCompare) {
-                            if (detail.getDetailDescribe().equals(detailDescribe)) {
-                                detailList.add(detail);
-                                createNewDetail = false;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (createNewDetail) {
-                        Detail detailModel = new Detail(detailName, detailDescribe);
-                        detailService.save(detailModel);
-                        detailList.add(detailModel);
-
-                        log.info(detailName + ", " + detailDescribe);
-                    }
+                    detailList.add(getDetail(line));
                 }
+
             } catch (IOException ignored) {}
 
             itemModel.setDetailList(detailList);
             itemService.save(itemModel);
-
-            log.info("]");
-            log.info("------------------");
         }
     }
 }
