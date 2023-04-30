@@ -80,8 +80,15 @@ public class ItemParser implements CommandLineRunner {
         for (File item : Objects.requireNonNull(itemDir.listFiles(File::isFile))) {
             String itemText = item.getName().replace(".txt", "");
 
+            if (itemText.split("")[0].equals(".")) continue;
+
             String itemName = itemText.split(" ")[0].replace("_", " ");
             String itemDescribe = itemText.split(" ")[1].replace("_", " ");
+
+            if (itemService.findByName(itemName) != null) {
+                log.info("Item already exists");
+                continue;
+            }
 
             Item itemModel = new Item();
             itemModel.setItemName(itemName);

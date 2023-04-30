@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,8 +52,15 @@ public class ConstructionParser implements CommandLineRunner {
         for (File construction : Objects.requireNonNull(constDir.listFiles(File::isFile))) {
             String[] constText = construction.getName().replace(".txt", "").split(" ");
 
+            if (constText[0].split("")[0].equals(".")) continue;
+
             String constName = constText[0].replace("_", " ");
             String constDescribe = constText[1].replace("_", " ");
+
+            if (constructionService.findByName(constName) != null) {
+                log.info("Construction already exists");
+                continue;
+            }
 
             Construction constModel = new Construction();
 
