@@ -7,6 +7,6 @@ import java.util.List;
 public interface CIQService {
     void save(ConstItemQuantity constItemQuantity);
     ConstItemQuantity findByID(Long id);
-    ConstItemQuantity findByDetailID(Long id);
-    List<ConstItemQuantity> findByItemID(Long id);
+    ConstItemQuantity findByItemID(Long id);
+    List<ConstItemQuantity> findByConstID(Long id);
 }

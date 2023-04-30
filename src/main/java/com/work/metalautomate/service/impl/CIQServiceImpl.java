@@ -28,12 +28,12 @@ public class CIQServiceImpl implements CIQService {
     }
 
     @Override
-    public ConstItemQuantity findByDetailID(Long id) {
+    public ConstItemQuantity findByItemID(Long id) {
         return ciqRepository.findByItemId(id);
     }
 
     @Override
-    public List<ConstItemQuantity> findByItemID(Long id) {
+    public List<ConstItemQuantity> findByConstID(Long id) {
         return ciqRepository.findByConstructionId(id);
     }
 }

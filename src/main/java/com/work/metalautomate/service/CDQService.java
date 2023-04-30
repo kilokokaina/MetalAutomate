@@ -1,7 +1,5 @@
 package com.work.metalautomate.service;
 
-import com.work.metalautomate.model.Construction;
-import com.work.metalautomate.model.Detail;
 import com.work.metalautomate.model.quantity.ConstDetailQuantity;
 
 import java.util.List;
