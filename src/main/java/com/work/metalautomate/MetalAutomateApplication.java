@@ -4,6 +4,7 @@ import com.work.metalautomate.model.quantity.ConstDetailQuantity;
 import com.work.metalautomate.model.Construction;
 import com.work.metalautomate.model.Detail;
 import com.work.metalautomate.repo.CDQRepository;
+import com.work.metalautomate.service.impl.CDQServiceImpl;
 import com.work.metalautomate.service.impl.ConstructionServiceImpl;
 import com.work.metalautomate.service.impl.DetailServiceImpl;
 import com.work.metalautomate.service.impl.ItemServiceImpl;
@@ -14,20 +15,17 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.List;
+
 @Slf4j
 @SpringBootApplication
 public class MetalAutomateApplication {
-    @Autowired
-    public ConstructionServiceImpl constructionService;
+    public final CDQServiceImpl cdqService;
 
     @Autowired
-    public DetailServiceImpl detailService;
-
-    @Autowired
-    public ItemServiceImpl itemService;
-
-    @Autowired
-    public CDQRepository cdqRepository;
+    public MetalAutomateApplication(CDQServiceImpl cdqService) {
+        this.cdqService = cdqService;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(MetalAutomateApplication.class, args);
@@ -36,11 +34,11 @@ public class MetalAutomateApplication {
     @Bean
     public CommandLineRunner cmd() {
         return args -> {
-            Construction construction = constructionService.findByName("Угловая промежуточная опора 2УП10-20МИ-1");
-            Detail detail = detailService.findByName("Болт М20x260**");
-
-            ConstDetailQuantity constDetailQuantity = new ConstDetailQuantity(construction, detail, 2);
-            cdqRepository.save(constDetailQuantity);
+            List<ConstDetailQuantity> cdqList = cdqService.findByConstID(1L);
+            cdqList.forEach(cdqItem -> {
+                Detail detail = cdqItem.getDetail();
+                log.info(detail.getDetailName() + " " + cdqItem.getQuantity());
+            });
         };
     }
 }

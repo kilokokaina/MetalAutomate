@@ -21,7 +21,7 @@ import java.util.Objects;
 
 @Slf4j
 @Component
-public class ConstructionParser implements CommandLineRunner {
+public class ConstructionParser /*implements CommandLineRunner*/ {
     private final ConstructionServiceImpl constructionService;
     private final DetailServiceImpl detailService;
     private final ItemServiceImpl itemService;
@@ -34,7 +34,7 @@ public class ConstructionParser implements CommandLineRunner {
         this.itemService = itemService;
     }
 
-    @Override
+//    @Override
     public void run(String... args) {
         ItemParser itemParser = new ItemParser(detailService, itemService);
         File constDir = new File("/Users/nikol/Desktop/details/construction");

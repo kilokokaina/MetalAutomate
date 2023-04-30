@@ -19,7 +19,7 @@ import java.util.Objects;
 
 @Slf4j
 @Component
-public class ItemParser implements CommandLineRunner {
+public class ItemParser /*implements CommandLineRunner*/ {
     private final DetailServiceImpl detailService;
     private final ItemServiceImpl itemService;
 
@@ -60,7 +60,7 @@ public class ItemParser implements CommandLineRunner {
         return detailModel;
     }
 
-    @Override
+//    @Override
     public void run(String... args) {
         File itemDir = new File("/Users/nikol/Desktop/details/item");
 
