@@ -1,4 +1,4 @@
-package com.work.metalautomate.model;
+package com.work.metalautomate.model.manufacture;
 
 import jakarta.persistence.*;
 import lombok.Data;

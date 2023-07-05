@@ -1,8 +1,8 @@
-package com.work.metalautomate.service.impl;
+package com.work.metalautomate.service.impl.quantity;
 
 import com.work.metalautomate.model.quantity.ConstItemQuantity;
-import com.work.metalautomate.repo.CIQRepository;
-import com.work.metalautomate.service.CIQService;
+import com.work.metalautomate.repo.quantity.CIQRepository;
+import com.work.metalautomate.service.quantity.CIQService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

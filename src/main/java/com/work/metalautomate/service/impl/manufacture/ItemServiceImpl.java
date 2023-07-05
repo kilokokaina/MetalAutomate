@@ -1,9 +1,8 @@
-package com.work.metalautomate.service.impl;
+package com.work.metalautomate.service.impl.manufacture;
 
-import com.work.metalautomate.model.Detail;
-import com.work.metalautomate.model.Item;
-import com.work.metalautomate.repo.ItemRepository;
-import com.work.metalautomate.service.ItemService;
+import com.work.metalautomate.model.manufacture.Item;
+import com.work.metalautomate.repo.manufacture.ItemRepository;
+import com.work.metalautomate.service.manufacture.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +37,7 @@ public class ItemServiceImpl implements ItemService {
         itemRepository.deleteById(id);
     }
 
-    public List<Detail> findSeveralByName(String detailName) {
+    public List<Item> findSeveralByName(String detailName) {
         return itemRepository.findSeveralByName(detailName);
     }
 }

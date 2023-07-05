@@ -1,4 +1,4 @@
-package com.work.metalautomate.service;
+package com.work.metalautomate.service.quantity;
 
 import com.work.metalautomate.model.quantity.ConstDetailQuantity;
 

@@ -1,6 +1,6 @@
-package com.work.metalautomate.service;
+package com.work.metalautomate.service.manufacture;
 
-import com.work.metalautomate.model.Detail;
+import com.work.metalautomate.model.manufacture.Detail;
 
 public interface DetailService {
     void save(Detail detail);

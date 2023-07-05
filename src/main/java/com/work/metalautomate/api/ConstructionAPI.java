@@ -1,7 +1,7 @@
 package com.work.metalautomate.api;
 
-import com.work.metalautomate.model.Construction;
-import com.work.metalautomate.service.impl.ConstructionServiceImpl;
+import com.work.metalautomate.model.manufacture.Construction;
+import com.work.metalautomate.service.impl.manufacture.ConstructionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

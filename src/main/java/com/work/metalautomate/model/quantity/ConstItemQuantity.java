@@ -1,7 +1,7 @@
 package com.work.metalautomate.model.quantity;
 
-import com.work.metalautomate.model.Construction;
-import com.work.metalautomate.model.Item;
+import com.work.metalautomate.model.manufacture.Construction;
+import com.work.metalautomate.model.manufacture.Item;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

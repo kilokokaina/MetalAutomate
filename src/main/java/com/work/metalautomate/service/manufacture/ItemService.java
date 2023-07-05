@@ -1,6 +1,6 @@
-package com.work.metalautomate.service;
+package com.work.metalautomate.service.manufacture;
 
-import com.work.metalautomate.model.Item;
+import com.work.metalautomate.model.manufacture.Item;
 
 public interface ItemService {
     void save(Item item);

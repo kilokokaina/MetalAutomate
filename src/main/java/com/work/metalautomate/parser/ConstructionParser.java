@@ -1,28 +1,31 @@
 package com.work.metalautomate.parser;
 
-import com.work.metalautomate.model.Construction;
-import com.work.metalautomate.model.Detail;
-import com.work.metalautomate.model.Item;
+import com.work.metalautomate.model.manufacture.Construction;
+import com.work.metalautomate.model.manufacture.Detail;
+import com.work.metalautomate.model.manufacture.Item;
 import com.work.metalautomate.model.quantity.ConstDetailQuantity;
 import com.work.metalautomate.model.quantity.ConstItemQuantity;
-import com.work.metalautomate.service.impl.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
+import com.work.metalautomate.service.impl.manufacture.ConstructionServiceImpl;
+import com.work.metalautomate.service.impl.manufacture.DetailServiceImpl;
+import com.work.metalautomate.service.impl.manufacture.ItemServiceImpl;
+import com.work.metalautomate.service.impl.quantity.CDQServiceImpl;
+import com.work.metalautomate.service.impl.quantity.CIQServiceImpl;
+import com.work.metalautomate.service.impl.quantity.IDQServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 @Slf4j
 @Component
-public class ConstructionParser implements CommandLineRunner {
+public class ConstructionParser /*implements CommandLineRunner*/ {
     private final ConstructionServiceImpl constructionService;
     private final DetailServiceImpl detailService;
     private final ItemServiceImpl itemService;
@@ -44,7 +47,7 @@ public class ConstructionParser implements CommandLineRunner {
         this.ciqService = ciqService;
     }
 
-    @Override
+//    @Override
     public void run(String... args) {
         ItemParser itemParser = new ItemParser(detailService, itemService, idqService);
         File constDir = new File("/Users/nikol/Desktop/details/construction");

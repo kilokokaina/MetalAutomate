@@ -1,8 +1,8 @@
-package com.work.metalautomate.service.impl;
+package com.work.metalautomate.service.impl.quantity;
 
 import com.work.metalautomate.model.quantity.ItemDetailQuantity;
-import com.work.metalautomate.repo.IDQRepository;
-import com.work.metalautomate.service.IDQService;
+import com.work.metalautomate.repo.quantity.IDQRepository;
+import com.work.metalautomate.service.quantity.IDQService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
-package com.work.metalautomate.repo;
+package com.work.metalautomate.repo.manufacture;
 
-import com.work.metalautomate.model.Detail;
+import com.work.metalautomate.model.manufacture.Detail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,8 +1,8 @@
-package com.work.metalautomate.service.impl;
+package com.work.metalautomate.service.impl.manufacture;
 
-import com.work.metalautomate.model.Detail;
-import com.work.metalautomate.repo.DetailRepository;
-import com.work.metalautomate.service.DetailService;
+import com.work.metalautomate.model.manufacture.Detail;
+import com.work.metalautomate.repo.manufacture.DetailRepository;
+import com.work.metalautomate.service.manufacture.DetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

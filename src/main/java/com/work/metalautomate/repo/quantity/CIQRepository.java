@@ -1,4 +1,4 @@
-package com.work.metalautomate.repo;
+package com.work.metalautomate.repo.quantity;
 
 import com.work.metalautomate.model.quantity.ConstItemQuantity;
 import org.springframework.data.jpa.repository.JpaRepository;

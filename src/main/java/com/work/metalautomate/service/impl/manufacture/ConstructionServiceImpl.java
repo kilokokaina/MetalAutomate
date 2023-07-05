@@ -1,9 +1,8 @@
-package com.work.metalautomate.service.impl;
+package com.work.metalautomate.service.impl.manufacture;
 
-import com.work.metalautomate.model.Construction;
-import com.work.metalautomate.model.Detail;
-import com.work.metalautomate.repo.ConstructionRepository;
-import com.work.metalautomate.service.ConstructionService;
+import com.work.metalautomate.model.manufacture.Construction;
+import com.work.metalautomate.repo.manufacture.ConstructionRepository;
+import com.work.metalautomate.service.manufacture.ConstructionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +38,7 @@ public class ConstructionServiceImpl implements ConstructionService {
         constructionRepository.deleteById(id);
     }
 
-    public List<Detail> findSeveralByName(String detailName) {
+    public List<Construction> findSeveralByName(String detailName) {
         return constructionRepository.findSeveralByName(detailName);
     }
 }

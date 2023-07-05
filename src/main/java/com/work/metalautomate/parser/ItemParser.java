@@ -1,13 +1,12 @@
 package com.work.metalautomate.parser;
 
-import com.work.metalautomate.model.Detail;
-import com.work.metalautomate.model.Item;
+import com.work.metalautomate.model.manufacture.Detail;
+import com.work.metalautomate.model.manufacture.Item;
 import com.work.metalautomate.model.quantity.ItemDetailQuantity;
-import com.work.metalautomate.service.impl.DetailServiceImpl;
-import com.work.metalautomate.service.impl.IDQServiceImpl;
-import com.work.metalautomate.service.impl.ItemServiceImpl;
+import com.work.metalautomate.service.impl.manufacture.DetailServiceImpl;
+import com.work.metalautomate.service.impl.quantity.IDQServiceImpl;
+import com.work.metalautomate.service.impl.manufacture.ItemServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,7 +18,7 @@ import java.util.*;
 
 @Slf4j
 @Component
-public class ItemParser implements CommandLineRunner {
+public class ItemParser /*implements CommandLineRunner*/ {
     private final DetailServiceImpl detailService;
     private final ItemServiceImpl itemService;
     private final IDQServiceImpl idqService;
@@ -73,7 +72,7 @@ public class ItemParser implements CommandLineRunner {
         return new Pair<>(detailModel, detailInfo.getElementQuantity());
     }
 
-    @Override
+//    @Override
     public void run(String... args) {
         File itemDir = new File("/Users/nikol/Desktop/details/item");
 
