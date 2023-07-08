@@ -37,7 +37,7 @@ public class MainController {
     }
 
     @PostMapping("search")
-    public String search(@RequestParam(name = "search") String search, Model model) {
+    public String search(@RequestParam(name = "query") String search, Model model) {
         log.info(search);
 
         List<Construction> constList = constructionService.findSeveralByName(search);
