@@ -26,16 +26,32 @@
                 </p>
             </form>
 
-            <p class="mb-2" id="detailBlock">
-                <input type="search" list="detailsList" id="detail-input-id-1"
-                      placeholder="Поиск деталей" oninput="detailOutput()"/>
-            </p>
-            <button class="btn btn-primary" id="addDetail" onclick="addDetailSearch()">+</button>
-            <p class="mb-2" id="itemBlock">
-                <input type="search" list="itemsList" id="item-input-id-1"
-                      placeholder="Поиск изделий" oninput="itemOutput()"/>
-            </p>
-            <button class="btn btn-primary" id="addItem" onclick="addItemSearch()">+</button>
+            <div>
+                <h5>Поиск деталий</h5>
+                <p id="detailBlock">
+                    <input class="detail-input" type="search" list="detailsList" id="detail-input-id-1"
+                          placeholder="Поиск деталей" oninput="detailOutput()"/>
+                </p>
+                <p>
+                    <button class="btn btn-success" id="addDetail" onclick="addDetailSearch()">+</button>
+                    <button class="btn btn-danger" id="removeDetail" onclick="removeDetailSearch()">-</button>
+                </p>
+            </div>
+            <div>
+                <h5>Поиск изделий</h5>
+                <p class="mb-2" id="itemBlock">
+                    <input class="item-input" type="search" list="itemsList" id="item-input-id-1"
+                          placeholder="Поиск изделий" oninput="itemOutput()"/>
+                </p>
+                <p>
+                    <button class="btn btn-success" id="addItem" onclick="addItemSearch()">+</button>
+                    <button class="btn btn-danger" id="removeItem" onclick="removeItemSearch()">-</button>
+                </p>
+            </div>
+
+            <textarea id="order-details" placeholder="Добавьте примичания к заказу..." rows="5" cols="33"></textarea>
+
+            <p><button class="btn btn-primary" onclick="createOrder()">Сформировать</button></p>
 
             <datalist id="detailsList">
             </datalist>

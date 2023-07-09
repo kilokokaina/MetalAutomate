@@ -36,4 +36,15 @@ public class OrderModel {
             inverseJoinColumns = { @JoinColumn(name = "item_id") }
     )
     private List<Item> itemList;
+
+    @Override
+    public String toString() {
+        return String.format("""
+                Date: %s,
+                Status: %s,
+                Detail`s list: %s,
+                Item`s list: %s,
+                Details: %s
+                """, getCreationDate(), getOrderStatus(), getDetailList(), getItemList(), getOrderText());
+    }
 }
