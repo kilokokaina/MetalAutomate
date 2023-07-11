@@ -40,7 +40,7 @@ public class OrderModel {
     @Override
     public String toString() {
         return String.format("""
-                Date: %s,
+                \nDate: %s,
                 Status: %s,
                 Detail`s list: %s,
                 Item`s list: %s,

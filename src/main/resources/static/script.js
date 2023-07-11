@@ -2,6 +2,9 @@ let globalDetailCounter = 2;
 let globalItemCounter = 2;
 let usedDetailID, usedItemID;
 
+let detailRequestArray = [];
+let itemRequestArray = [];
+
 async function detailOutput() {
     document.querySelectorAll('.detail-input').forEach(event => {
         event.addEventListener('input', (e) => {
@@ -28,6 +31,14 @@ async function detailOutput() {
 
         detailListElement.appendChild(detailElement);
     });
+
+    console.log(detailList);
+
+    detailRequestArray[usedDetailID.split('_')[1] - 1] = {
+        id: detailList[0].id,
+        detailName: detailList[0].detailName,
+        detailDescribe: detailList[0].detailDescribe
+    };
 }
 
 async function itemOutput() {
@@ -56,6 +67,13 @@ async function itemOutput() {
 
         itemListElement.appendChild(itemElement);
     });
+
+    itemRequestArray[usedItemID.split('_')[1] - 1] = {
+        id: itemList[0].id,
+        itemName: itemList[0].itemName,
+        itemDescribe: itemList[0].itemDescribe,
+        detailList: itemList[0].detailList
+    };
 }
 
 function addDetailSearch() {
@@ -64,8 +82,9 @@ function addDetailSearch() {
     detailInput.setAttribute('class', 'detail-input');
     detailInput.setAttribute('type', 'search');
     detailInput.setAttribute('list', 'detailsList');
-    detailInput.setAttribute('id', `detail-input-id-${globalDetailCounter}`);
+    detailInput.setAttribute('id', `detail-input-id_${globalDetailCounter}`);
     detailInput.setAttribute('placeholder', 'Поиск деталей');
+    detailInput.setAttribute('autocomplete', 'off');
     detailInput.setAttribute('oninput', 'detailOutput()');
 
     let element = document.getElementById('detailBlock');
@@ -75,8 +94,11 @@ function addDetailSearch() {
 }
 
 function removeDetailSearch() {
-    let element = document.getElementById(`detail-input-id-${globalDetailCounter - 1}`);
+    let element = document.getElementById(`detail-input-id_${globalDetailCounter - 1}`);
     element.remove();
+
+    detailRequestArray.pop();
+
     globalDetailCounter--;
 }
 
@@ -86,8 +108,9 @@ function addItemSearch() {
     itemInput.setAttribute('class', 'item-input');
     itemInput.setAttribute('type', 'search');
     itemInput.setAttribute('list', 'itemsList');
-    itemInput.setAttribute('id', `item-input-id-${globalItemCounter}`);
+    itemInput.setAttribute('id', `item-input-id_${globalItemCounter}`);
     itemInput.setAttribute('placeholder', 'Поиск изделий');
+    itemInput.setAttribute('autocomplete', 'off');
     itemInput.setAttribute('oninput', 'itemOutput()');
 
     let element = document.getElementById('itemBlock');
@@ -97,35 +120,52 @@ function addItemSearch() {
 }
 
 function removeItemSearch() {
-    let element = document.getElementById(`item-input-id-${globalItemCounter - 1}`);
+    let element = document.getElementById(`item-input-id_${globalItemCounter - 1}`);
     element.remove();
     globalItemCounter--;
 }
 
 function createOrder() {
-    let detailList = document.querySelectorAll('.detail-input');
-    let detailArray = [];
-
-    let itemList = document.querySelectorAll('.item-input');
-    let itemArray = [];
-
-    detailList.forEach(detail => detailArray.push(detail.value));
-    itemList.forEach(item => itemArray.push(item.value));
-
-    let orderDetails = document.getElementById('order-details').value;
-
-
-    let orderData = {
-        detailList: detailArray,
-        itemList: itemArray,
-        orderDetails: orderDetails
-    };
-
-    fetch('api/order/create', {
+    // let detailList = document.querySelectorAll('.detail-input');
+    // let detailArray = [];
+    //
+    // let itemList = document.querySelectorAll('.item-input');
+    // let itemArray = [];
+    //
+    // detailList.forEach(detail => detailArray.push(detail.value));
+    // itemList.forEach(item => itemArray.push(item.value));
+    //
+    // let orderDetails = document.getElementById('order-details').value;
+    //
+    //
+    // let orderData = {
+    //     detailList: detailArray,
+    //     itemList: itemArray,
+    //     orderDetails: orderDetails
+    // };
+    //
+    // fetch('api/order/create', {
+    //     method: 'POST',
+    //     headers: {
+    //         "Content-Type": "application/json; charset=utf-8"
+    //     },
+    //     body: JSON.stringify(orderData)
+    // }).then(async response => alert(await response.text()));
+    fetch('api/order/test', {
         method: 'POST',
         headers: {
             "Content-Type": "application/json; charset=utf-8"
         },
-        body: JSON.stringify(orderData)
-    }).then(async response => alert(await response.text()));
+        body: JSON.stringify(detailRequestArray)
+    }).then();
+
+    console.log(itemRequestArray);
+    //
+    // fetch("api/order/test_item", {
+    //     method: 'POST',
+    //     headers: {
+    //         "Content-Type": "application/json; charset=utf-8"
+    //     },
+    //     body: JSON.stringify(detailRequestArray)
+    // }).then();
 }

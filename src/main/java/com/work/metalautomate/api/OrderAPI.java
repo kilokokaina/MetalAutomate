@@ -51,4 +51,14 @@ public class OrderAPI {
 
         return "Order created";
     }
+
+    @PostMapping("test")
+    public void test(@RequestBody Detail[] details) {
+        log.info(List.of(details).toString());
+    }
+
+    @PostMapping("test_item")
+    public void testItem(@RequestBody Item[] items) {
+        log.info(List.of(items).toString());
+    }
 }

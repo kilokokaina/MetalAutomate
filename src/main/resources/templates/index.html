@@ -20,7 +20,7 @@
             <form method="post" th:action="@{search}">
                 <p><b>Введите название детали, изделия или конструкции</b><br>
                     <div class="input-group mb-3">
-                        <input class="form-control" type="text" placeholder="Название" name="query"/>
+                        <input class="form-control" type="text" placeholder="Название" name="query" autocomplete="off"/>
                         <button class="btn btn-primary" type="submit">Поиск</button>
                     </div>
                 </p>
@@ -29,8 +29,8 @@
             <div>
                 <h5>Поиск деталий</h5>
                 <p id="detailBlock">
-                    <input class="detail-input" type="search" list="detailsList" id="detail-input-id-1"
-                          placeholder="Поиск деталей" oninput="detailOutput()"/>
+                    <input class="detail-input" type="search" list="detailsList" id="detail-input-id_1"
+                          placeholder="Поиск деталей" autocomplete="off" oninput="detailOutput()"/>
                 </p>
                 <p>
                     <button class="btn btn-success" id="addDetail" onclick="addDetailSearch()">+</button>
@@ -40,8 +40,8 @@
             <div>
                 <h5>Поиск изделий</h5>
                 <p class="mb-2" id="itemBlock">
-                    <input class="item-input" type="search" list="itemsList" id="item-input-id-1"
-                          placeholder="Поиск изделий" oninput="itemOutput()"/>
+                    <input class="item-input" type="search" list="itemsList" id="item-input-id_1"
+                          placeholder="Поиск изделий" autocomplete="off" oninput="itemOutput()"/>
                 </p>
                 <p>
                     <button class="btn btn-success" id="addItem" onclick="addItemSearch()">+</button>
