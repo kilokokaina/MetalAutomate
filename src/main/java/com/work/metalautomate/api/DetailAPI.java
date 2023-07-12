@@ -31,6 +31,16 @@ public class DetailAPI {
 
     @PostMapping("search")
     public List<Detail> searchDetail(@RequestBody String detailSearchString) {
-        return detailService.findSeveralByName(detailSearchString);
+        if (detailSearchString.contains("(") && detailSearchString.contains(")")) {
+            String[] detailInfo = detailSearchString.split(" \\(");
+
+            String detailName = detailInfo[0];
+            String detailDescribe = detailInfo[1].replace(")", "");
+
+            List<Detail> detailList = detailService.findSeveralByName(detailName);
+            return detailList.stream().filter(detail ->
+                    detail.getDetailDescribe().equals(detailDescribe)).toList();
+        }
+        else return detailService.findSeveralByName(detailSearchString);
     }
 }

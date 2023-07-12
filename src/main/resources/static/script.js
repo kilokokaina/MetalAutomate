@@ -25,14 +25,25 @@ async function detailOutput() {
 
     let detailList = await response.json();
 
+    let detailCount = new Map();
+    for (let i = 0; i < detailList.length; i++) {
+        let counter = 0;
+        for (let j = 0; j < detailList.length; j++) {
+            if (detailList[i].detailName === detailList[j].detailName) counter++;
+        }
+
+        detailCount.set(detailList[i].detailName, counter);
+    }
+
     detailList.forEach(detail => {
         let detailElement = document.createElement('option');
-        detailElement.innerText = detail.detailName;
+
+        if (detailCount.get(detail.detailName) > 1) {
+            detailElement.innerText = `${detail.detailName} (${detail.detailDescribe})`;
+        } else detailElement.innerText = detail.detailName;
 
         detailListElement.appendChild(detailElement);
     });
-
-    console.log(detailList);
 
     detailRequestArray[usedDetailID.split('_')[1] - 1] = {
         id: detailList[0].id,
@@ -61,9 +72,22 @@ async function itemOutput() {
 
     let itemList = await response.json();
 
+    let itemCount = new Map();
+    for (let i = 0; i < itemList.length; i++) {
+        let counter = 0;
+        for (let j = 0; j < itemList.length; j++) {
+            if (itemList[i].itemName === itemList[j].itemName) counter++;
+        }
+
+        itemCount.set(itemList[i].itemName, counter);
+    }
+
     itemList.forEach(item => {
         let itemElement = document.createElement('option');
-        itemElement.innerText = item.itemName;
+
+        if (itemCount.get(item.itemName) > 1) {
+            itemElement.innerText = `${item.itemName} (${item.itemDescribe})`;
+        } else itemElement.innerText = item.itemName;
 
         itemListElement.appendChild(itemElement);
     });
@@ -126,46 +150,19 @@ function removeItemSearch() {
 }
 
 function createOrder() {
-    // let detailList = document.querySelectorAll('.detail-input');
-    // let detailArray = [];
-    //
-    // let itemList = document.querySelectorAll('.item-input');
-    // let itemArray = [];
-    //
-    // detailList.forEach(detail => detailArray.push(detail.value));
-    // itemList.forEach(item => itemArray.push(item.value));
-    //
-    // let orderDetails = document.getElementById('order-details').value;
-    //
-    //
-    // let orderData = {
-    //     detailList: detailArray,
-    //     itemList: itemArray,
-    //     orderDetails: orderDetails
-    // };
-    //
-    // fetch('api/order/create', {
-    //     method: 'POST',
-    //     headers: {
-    //         "Content-Type": "application/json; charset=utf-8"
-    //     },
-    //     body: JSON.stringify(orderData)
-    // }).then(async response => alert(await response.text()));
-    fetch('api/order/test', {
+    let orderData = {
+        detailList: detailRequestArray,
+        itemList: itemRequestArray,
+        orderDetails: document.getElementById('order-details').value
+    };
+
+    console.log(orderData);
+
+    fetch('api/order/create', {
         method: 'POST',
         headers: {
             "Content-Type": "application/json; charset=utf-8"
         },
-        body: JSON.stringify(detailRequestArray)
-    }).then();
-
-    console.log(itemRequestArray);
-    //
-    // fetch("api/order/test_item", {
-    //     method: 'POST',
-    //     headers: {
-    //         "Content-Type": "application/json; charset=utf-8"
-    //     },
-    //     body: JSON.stringify(detailRequestArray)
-    // }).then();
+        body: JSON.stringify(orderData)
+    }).then(async response => alert(await response.text()));
 }

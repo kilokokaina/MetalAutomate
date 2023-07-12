@@ -1,13 +1,15 @@
 package com.work.metalautomate.api.dto;
 
+import com.work.metalautomate.model.manufacture.Detail;
+import com.work.metalautomate.model.manufacture.Item;
 import lombok.Getter;
 
 import java.util.Arrays;
 
 @Getter
 public class OrderDTO {
-    private String[] detailList;
-    private String[] itemList;
+    private Detail[] detailList;
+    private Item[] itemList;
     private String orderDetails;
 
     @Override
