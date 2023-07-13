@@ -3,7 +3,7 @@ package com.work.metalautomate.api;
 import com.work.metalautomate.api.dto.OrderDTO;
 import com.work.metalautomate.model.order.OrderModel;
 import com.work.metalautomate.model.order.OrderStatus;
-import com.work.metalautomate.repo.order.OrderRepository;
+import com.work.metalautomate.service.impl.order.OrderServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +14,11 @@ import java.util.List;
 @RestController
 @RequestMapping("api/order")
 public class OrderAPI {
-    private final OrderRepository orderRepository;
+    private final OrderServiceImpl orderService;
 
     @Autowired
-    public OrderAPI(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
+    public OrderAPI(OrderServiceImpl orderService) {
+        this.orderService = orderService;
     }
 
     @PostMapping("create")
@@ -32,8 +32,17 @@ public class OrderAPI {
 
         log.info(orderModel.toString());
 
-        orderRepository.save(orderModel);
+        orderService.save(orderModel);
 
         return String.format("Order %s created", orderModel.getCreationDate());
+    }
+
+    @GetMapping("set_status")
+    public @ResponseBody String setOrderStatus(@RequestParam String orderStatus,
+                                               @RequestParam OrderModel orderModel) {
+        orderModel.setOrderStatus(OrderStatus.valueOf(orderStatus));
+        orderService.save(orderModel);
+
+        return "Статус заказа изменен";
     }
 }
