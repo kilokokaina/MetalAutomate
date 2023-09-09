@@ -1,11 +1,13 @@
 package com.work.metalautomate.model.order;
 
 import com.work.metalautomate.model.manufacture.Detail;
+import com.work.metalautomate.model.manufacture.Element;
 import com.work.metalautomate.model.manufacture.Item;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,8 +19,9 @@ public class OrderModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long orderId;
 
-    private Date creationDate = new Date();
+    @Lob
     private String orderText;
+    private Date creationDate = new Date();
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
@@ -36,6 +39,15 @@ public class OrderModel {
             inverseJoinColumns = { @JoinColumn(name = "item_id") }
     )
     private List<Item> itemList;
+
+    public List<Element> getElementList() {
+        List<Element> elementList = new ArrayList<>();
+
+        if (getDetailList() != null) elementList.addAll(getDetailList());
+        if (getItemList() != null) elementList.addAll(getItemList());
+
+        return elementList;
+    }
 
     @Override
     public String toString() {

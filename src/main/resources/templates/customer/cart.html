@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no">
+
+        <title>Front Test</title>
+
+        <link rel="shortcut icon" href="/dist/favicon.ico">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/dist/assets/vendor/bootstrap-icons/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="/dist/assets/css/theme-dark.min.css">
+
+        <link rel="stylesheet" href="/dist/assets/vendor/quill/dist/quill.snow.css">
+    </head>
+    <body>
+        <!-- Header -->
+        <header th:fragment="header" id="header" class="navbar navbar-expand-lg navbar-end mb-3">
+            <div class="container">
+                <div class="navbar-nav-wrap">
+                    <!-- Logo -->
+                    <a class="navbar-brand" th:href="@{/customer?detailCheck=on&itemCheck=on}" aria-label="Front">
+                        <img class="navbar-brand-logo" src="/dist/assets/svg/logos/logo.svg" alt="Logo" data-hs-theme-appearance="default">
+                    </a>
+                    <!-- End Logo -->
+
+                    <div class="navbar-nav-wrap-content-end">
+                        <!-- Navbar -->
+                        <ul class="navbar-nav">
+                            <!-- Cart -->
+                            <li class="nav-item">
+                                <a th:href="@{/customer/cart}">
+                                    <i class="bi-basket"></i> Корзина
+                                </a>
+                            </li>
+                            <!-- Cart End -->
+                        </ul>
+                        <!-- End Navbar -->
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- End Header -->
+
+        <main id="content" role="main" class="main">
+            <div class="content container">
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Нетиповой заказ</h5>
+                                <button type="button" id="close-btn" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                Опишите детали заказа, добавьте необходимые файлы (картинки, чертежи и т.д.) и нажмите кнопку "Сохранить заказ". Он будет добавлен в корзину и готов для оформления
+                                <!-- Quill -->
+                                <div class="quill-custom">
+                                    <div class="js-quill" style="min-height: 15rem;" th:utext="${orderText}"
+                                         data-hs-quill-options='{
+                                        "placeholder": "Детали заказа...",
+                                        "attach": "#exampleModal",
+                                        "modules": {
+                                            "toolbar": [
+                                                ["bold", "italic", "underline", "link", "image", {"list": "bullet"}]
+                                            ]
+                                        }
+                                    }'>
+                                    </div>
+                                </div>
+                                <!-- End Quill -->
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-white" data-bs-dismiss="modal">Закрыть</button>
+                                <button type="button" class="btn btn-primary" onclick="editOrder()">Сохранить заказ</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Modal -->
+
+                <!-- Nav -->
+<!--                <div class="text-center">-->
+<!--                    <ul class="nav nav-segment nav-pills mb-7" role="tablist">-->
+<!--                        <li class="nav-item">-->
+<!--                            <a class="nav-link active" id="nav-one-eg1-tab" href="#nav-one-eg1" data-bs-toggle="pill" data-bs-target="#nav-one-eg1" role="tab" aria-controls="nav-one-eg1" aria-selected="true">Tab One</a>-->
+<!--                        </li>-->
+<!--                        <li class="nav-item">-->
+<!--                            <a class="nav-link" id="nav-two-eg1-tab" href="#nav-two-eg1" data-bs-toggle="pill" data-bs-target="#nav-two-eg1" role="tab" aria-controls="nav-two-eg1" aria-selected="false">Tab two</a>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+                <!-- End Nav -->
+
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="nav-one-eg1" role="tabpanel" aria-labelledby="nav-one-eg1-tab">
+                        <!-- Card -->
+                        <div th:each="element : ${order.getElementList()}" class="card mb-1" style="max-width: 20rem;">
+                            <div class="card-body">
+                                <div th:switch="${element.getClass().getSimpleName()}">
+                                    <span th:case="'Detail'">Деталь</span>
+                                    <span th:case="'Item'">Составное изделие</span>
+                                </div>
+                                <h3 class="card-title" th:text="${element.getName()}" />
+                                <p class="card-text" th:text="${element.getDescribe()}" />
+
+                                <!-- Quantity -->
+                                <div class="quantity-counter">
+                                    <div class="js-quantity-counter row align-items-center">
+                                        <div class="col">
+                                            <span class="d-block small">Количество</span>
+                                            <input th:id="${element.getId()}" type="text" value="1"
+                                                   th:class="'js-result form-control form-control-quantity-counter ' + ${element.getClass().getSimpleName().toLowerCase()}">
+                                        </div>
+                                        <!-- End Col -->
+
+                                        <div class="col-auto">
+                                            <a class="js-minus btn btn-outline-secondary btn-xs btn-icon rounded-circle" href="javascript:;">
+                                                <svg width="8" height="2" viewBox="0 0 8 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M0 1C0 0.723858 0.223858 0.5 0.5 0.5H7.5C7.77614 0.5 8 0.723858 8 1C8 1.27614 7.77614 1.5 7.5 1.5H0.5C0.223858 1.5 0 1.27614 0 1Z" fill="currentColor"/>
+                                                </svg>
+                                            </a>
+                                            <a class="js-plus btn btn-outline-secondary btn-xs btn-icon rounded-circle" href="javascript:;">
+                                                <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M4 0C4.27614 0 4.5 0.223858 4.5 0.5V3.5H7.5C7.77614 3.5 8 3.72386 8 4C8 4.27614 7.77614 4.5 7.5 4.5H4.5V7.5C4.5 7.77614 4.27614 8 4 8C3.72386 8 3.5 7.77614 3.5 7.5V4.5H0.5C0.223858 4.5 0 4.27614 0 4C0 3.72386 0.223858 3.5 0.5 3.5H3.5V0.5C3.5 0.223858 3.72386 0 4 0Z" fill="currentColor"/>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                        <!-- End Col -->
+                                    </div>
+                                    <!-- End Row -->
+                                </div>
+                                <!-- End Quantity -->
+                            </div>
+                        </div>
+                        <!-- End Card -->
+
+                        <div class="divider-center mb-3 mt-3"></div>
+
+                        <!-- Card -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-header-title">Нетиповой заказ</h3>
+                                <small class="text-muted">Проверьте правильность зазказа</small>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text" th:utext="${orderText}"/>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Изменить</button>
+                            </div>
+                        </div>
+                        <!-- End Card -->
+
+                        <button class="js-go-to position-fixed btn btn-primary" style="right: 2rem; bottom: 2rem;"
+                                data-hs-go-to-options='{
+                            "isReferencedToOtherPage": 700
+                            "offsetTop": 700,
+                            "position": {
+                                "init": {
+                                    "right": 32
+                                },
+                                "show": {
+                                    "bottom": 32
+                                },
+                                "hide": {
+                                    "bottom": -32
+                                }
+                            }
+                            }' onclick="goToCustomerPage()">
+                            Оформить заказ
+                        </button>
+                    </div>
+
+                    <div class="tab-pane fade" id="nav-two-eg1" role="tabpanel" aria-labelledby="nav-two-eg1-tab">
+<!--                        <button class="btn btn-primary rounded-pill" onclick="goToCartPage()">-->
+<!--                            <i class="bi bi-arrow-left"></i> Назад-->
+<!--                        </button>-->
+                        <h2>Заполните данные для оформления заказа</h2>
+
+                        <!-- Input Group -->
+                        <div class="mb-3">
+                            <label for="inputGroupLightFullName" class="form-label">ФИО</label>
+                            <div class="input-group input-group-merge input-group-light">
+                                <div class="input-group-prepend input-group-text" id="inputGroupLightFullNameAddOn">
+                                    <i class="bi-person"></i>
+                                </div>
+                                <input type="text" class="form-control" id="inputGroupLightFullName" placeholder="Иванов Иван Иванович" aria-label="Mark Williams" aria-describedby="inputGroupLightFullNameAddOn">
+                            </div>
+                        </div>
+                        <!-- End Input Group -->
+
+                        <!-- Phone Number -->
+                        <div class="mb-3">
+                            <label for="PhoneNumberLabel" class="form-label">Телефон</label>
+                            <div class="input-group input-group-merge input-group-light">
+                                <input type="text" class="js-input-mask form-control" id="PhoneNumberLabel" placeholder="+x(xxx)xxx-xx-xx"
+                                       data-hs-mask-options='{
+                                  "mask": "+0(000)000-00-00"
+                                }'>
+                            </div>
+                        </div>
+                        <!-- End Phone Number -->
+
+                        <!-- Input Group -->
+                        <div class="mb-3">
+                            <label for="inputGroupLightEmail" class="form-label">Электронная почта</label>
+
+                            <div class="input-group input-group-merge input-group-light">
+                                <div class="input-group-prepend input-group-text" id="inputGroupLightEmailAddOn">
+                                    <i class="bi-envelope-open"></i>
+                                </div>
+                                <input type="text" class="form-control" id="inputGroupLightEmail" placeholder="email@example.ru" aria-label="mark@example.com" aria-describedby="inputGroupLightEmailAddOn">
+                            </div>
+                        </div>
+                        <!-- End Input Group -->
+
+                        <button class="js-go-to position-fixed btn btn-primary" style="right: 2rem; bottom: 2rem;"
+                                data-hs-go-to-options='{
+                            "isReferencedToOtherPage": 700
+                            "offsetTop": 700,
+                            "position": {
+                                "init": {
+                                    "right": 32
+                                },
+                                "show": {
+                                    "bottom": 32
+                                },
+                                "hide": {
+                                    "bottom": -32
+                                }
+                            }
+                            }' onclick="goToCartPage()">
+                            В корзину
+                        </button>
+                    </div>
+                </div>
+                <!-- End Tab Content -->
+            </div>
+        </main>
+
+        <footer th:insert="~{partials/footer-front :: footer}"></footer>
+
+        <script src="/dist/assets/vendor/quill/dist/quill.min.js"></script>
+        <script src="/dist/assets/vendor/hs-quantity-counter/dist/hs-quantity-counter.min.js"></script>
+        <script src="/dist/assets/vendor/hs-go-to/dist/hs-go-to.min.js"></script>
+        <script src="/dist/assets/vendor/imask/dist/imask.min.js"></script>
+
+        <script>
+            (function() {
+                HSCore.components.HSQuill.init('.js-quill');
+                HSCore.components.HSMask.init('.js-input-mask')
+                new HSQuantityCounter('.js-quantity-counter');
+                new HSGoTo('.js-go-to');
+            })();
+
+            function goToCartPage() {
+                let cartTab = document.getElementById('nav-one-eg1');
+                let customerTab = document.getElementById('nav-two-eg1');
+
+                cartTab.setAttribute('class', 'tab-pane fade show active');
+                customerTab.setAttribute('class', 'tab-pane fade show');
+            }
+
+            function goToCustomerPage() {
+                let cartTab = document.getElementById('nav-one-eg1');
+                let customerTab = document.getElementById('nav-two-eg1');
+
+                cartTab.setAttribute('class', 'tab-pane fade show');
+                customerTab.setAttribute('class', 'tab-pane fade show active');
+            }
+
+            async function editOrder() {
+                let quill = document.querySelector('.js-quill');
+                let content = quill.querySelector('.ql-editor').innerHTML;
+
+                await fetch('/customer/set_details', {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8"
+                    },
+                    body: content
+                }).then(response => response.text()).then(status => {
+                    console.log('true');
+                    console.log(status);
+
+                    switch (status) {
+                        case 'true':
+                            console.log('дважды true')
+                            location.reload();
+                            break;
+                        case 'false':
+                            alert('Что-то пошло не так...');
+                            break;
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

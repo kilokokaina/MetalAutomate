@@ -1,9 +1,12 @@
 package com.work.metalautomate.config;
 
+import com.work.metalautomate.model.order.OrderModel;
 import com.work.metalautomate.service.impl.AuthenticationProviderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +15,7 @@ import org.springframework.security.config.annotation.web.configurers.LogoutConf
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.context.WebApplicationContext;
 
 @Configuration
 @EnableWebSecurity
@@ -36,7 +40,9 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeHttpRequests((request) -> request
-                        .requestMatchers("/", "/logout", "/auth", "/get_context").permitAll()
+                        .requestMatchers("/", "/logout", "/auth", "/get_context",
+                                "/dist/**", "/img/**", "/js/**", "/style/**", "/front",
+                                "/customer/**").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
@@ -44,7 +50,6 @@ public class WebSecurityConfig {
                         .loginPage("/login")
                         .permitAll()
                 )
-                .authenticationProvider(authenticationProvider)
                 .csrf().disable()
                 .logout(LogoutConfigurer::permitAll);
 
@@ -54,5 +59,14 @@ public class WebSecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
+    }
+
+    @Bean
+    @Scope(
+            value = WebApplicationContext.SCOPE_SESSION,
+            proxyMode = ScopedProxyMode.TARGET_CLASS
+    )
+    public OrderModel sessionOrder() {
+        return new OrderModel();
     }
 }

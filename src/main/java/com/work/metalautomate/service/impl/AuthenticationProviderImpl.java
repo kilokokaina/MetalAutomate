@@ -20,8 +20,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class AuthenticationProviderImpl implements AuthenticationProvider {
-    private SecurityContextRepository contextRepository = new HttpSessionSecurityContextRepository();
-
+    private final SecurityContextRepository contextRepository;
     private final UserServiceImpl userService;
     private final HttpServletRequest request;
     private final HttpServletResponse response;
@@ -30,6 +29,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
     public AuthenticationProviderImpl(UserServiceImpl userService,
                                       HttpServletRequest request,
                                       HttpServletResponse response) {
+        this.contextRepository  = new HttpSessionSecurityContextRepository();
         this.userService = userService;
         this.response = response;
         this.request = request;
@@ -58,23 +58,31 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
         );
     }
 
-    public boolean startSession(CredentialsDTO credentialsDTO) {
+    public String startSession(CredentialsDTO credentialsDTO) {
         String username = credentialsDTO.getUsername();
         String password = credentialsDTO.getPassword();
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
-        authentication = authenticate(authentication);
+        try {
+            Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
+            authentication = authenticate(authentication);
 
-        if (authentication == null) return false;
+            if (authentication == null) return "false";
 
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        context.setAuthentication(authentication);
+            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            context.setAuthentication(authentication);
 
-        contextRepository.saveContext(context, request, response);
+            contextRepository.saveContext(context, request, response);
 
-        log.info("Authentication success: " + username);
+            log.info("Authentication success: " + username);
+        } catch (NullPointerException nullEx) {
+            log.error(nullEx.getMessage());
+            return "Incorrect username or password";
+        } catch (AuthenticationException authEx) {
+            log.error(authEx.getMessage());
+            return "Somethings went wrong";
+        }
 
-        return true;
+        return "true";
     }
 
     @Override

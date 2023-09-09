@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="/style/style.css">
+        <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+
+        <title>Admin Dashboard Panel</title>
+    </head>
+    <body>
+        <nav>
+            <div class="logo-name">
+                <div class="logo-image">
+                    <img src="/img/logo.png" alt="">
+                </div>
+
+                <span class="logo_name">MA</span>
+            </div>
+
+            <div class="menu-items">
+                <ul class="nav-links">
+                    <li><a th:href="@{/}">
+                        <i class="uil uil-estate"></i>
+                        <span class="link-name">Главная</span>
+                    </a></li>
+                    <li><a th:href="@{admin}">
+                        <i class="uil uil-files-landscapes"></i>
+                        <span class="link-name">Админ-панель</span>
+                    </a></li>
+                    <li><a href="#">
+                        <i class="uil uil-chart"></i>
+                        <span class="link-name">Поиск</span>
+                    </a></li>
+                    <li><a href="#">
+                        <i class="uil uil-thumbs-up"></i>
+                        <span class="link-name">Личный кабинет</span>
+                    </a></li>
+                    <li><a href="#">
+                        <i class="uil uil-comments"></i>
+                        <span class="link-name">Comment</span>
+                    </a></li>
+                    <li><a href="#">
+                        <i class="uil uil-share"></i>
+                        <span class="link-name">Share</span>
+                    </a></li>
+                </ul>
+
+                <ul class="logout-mode">
+                    <li><a href="#">
+                        <i class="uil uil-signout"></i>
+                        <span class="link-name">Logout</span>
+                    </a></li>
+
+                    <li class="mode">
+                        <a href="#">
+                            <i class="uil uil-moon"></i>
+                            <span class="link-name">Dark Mode</span>
+                        </a>
+
+                        <div class="mode-toggle">
+                            <span class="switch"></span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <section class="dashboard">
+            <div class="top">
+                <i class="uil uil-bars sidebar-toggle"></i>
+
+                <div class="search-box">
+                    <i class="uil uil-search"></i>
+                    <input type="text" placeholder="Search here...">
+                </div>
+
+                <img src="/img/profile.jpg" alt="">
+            </div>
+
+            <div class="dash-content">
+                <div class="activity">
+                    <div class="title">
+                        <i class="uil uil-clock-three"></i>
+                        <span class="text">Поиск заказов</span>
+                    </div>
+
+                    <div class="activity-data">
+                        <div class="data names">
+                            <span class="data-title">Id</span>
+                            <span class="data-list" th:each="order : ${orderList}" th:text="${order.getOrderId}"/>
+                        </div>
+                        <div class="data email">
+                            <span class="data-title">Дата</span>
+                            <span class="data-list" th:each="order : ${orderList}">
+                                <a th:href="'order/' + ${order.getOrderId}">
+                                    <p th:text="${order.getCreationDate}"></p>
+                                </a>
+                            </span>
+                        </div>
+                        <div class="data joined">
+                            <span class="data-title">Статус</span>
+                            <span class="data-list" th:each="order : ${orderList}" th:text="${order.getOrderStatus}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script src="/js/script2.js"></script>
+    </body>
+</html>

@@ -25,8 +25,8 @@
                         <li class="nav-item">
                             <a class="nav-link" th:href="@{admin}">Админ-панель</a>
                         </li>
-                        <li class="nav-item">
-                            <button class="btn btn-success" onclick="login()">Выход</button>
+                        <li class="nav-item me-1">
+                            <button class="btn btn-success" onclick="login()">Вход</button>
                         </li>
                         <li class="nav-item">
                             <button class="btn btn-warning" onclick="{
@@ -83,7 +83,7 @@
             </datalist>
         </div>
 
-        <script type="text/javascript">
+        <script>
             async function login() {
                 let username = prompt('Enter your username: ');
                 let password = prompt('Enter your password: ');
@@ -110,6 +110,6 @@
             }
         </script>
         <footer th:insert="~{partials/footer :: footer}"></footer>
-        <script src="/script.js" type="text/javascript"></script>
+        <script src="/js/script.js" type="text/javascript"></script>
     </body>
 </html>

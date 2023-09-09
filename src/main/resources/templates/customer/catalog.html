@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no">
+
+        <title>Front Test</title>
+
+        <link rel="shortcut icon" href="/dist/favicon.ico">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/dist/assets/vendor/bootstrap-icons/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="/dist/assets/css/theme-dark.min.css">
+
+        <link rel="stylesheet" href="/dist/assets/vendor/quill/dist/quill.snow.css">
+    </head>
+    <body>
+        <!-- Header -->
+        <header th:fragment="header" id="header" class="navbar navbar-expand-lg navbar-end mb-3">
+            <div class="container">
+                <div class="navbar-nav-wrap">
+                    <!-- Logo -->
+                    <a class="navbar-brand" th:href="@{/customer?detailCheck=on&itemCheck=on}" aria-label="Front">
+                        <img class="navbar-brand-logo" src="/dist/assets/svg/logos/logo.svg" alt="Logo" data-hs-theme-appearance="default">
+                    </a>
+                    <!-- End Logo -->
+
+                    <div class="navbar-nav-wrap-content-end">
+                        <!-- Navbar -->
+                        <ul class="navbar-nav">
+                            <!-- Cart -->
+                            <li class="nav-item">
+                                <a th:href="@{/customer/cart}">
+                                    <i class="bi-basket"></i> Корзина
+                                </a>
+                            </li>
+                            <!-- Cart End -->
+                        </ul>
+                        <!-- End Navbar -->
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- End Header -->
+
+        <main id="content" role="main" class="main">
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Нетиповой заказ</h5>
+                            <button type="button" id="close-btn" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            Опишите детали заказа, добавьте необходимые файлы (картинки, чертежи и т.д.) и нажмите кнопку "Сохранить заказ". Он будет добавлен в корзину и готов для оформления
+                            <!-- Quill -->
+                            <div class="quill-custom">
+                                <div class="js-quill" style="min-height: 15rem;"
+                                    data-hs-quill-options='{
+                                        "placeholder": "Детали заказа...",
+                                        "attach": "#exampleModal",
+                                        "modules": {
+                                            "toolbar": [
+                                                ["bold", "italic", "underline", "link", "image", {"list": "bullet"}]
+                                            ]
+                                        }
+                                    }'>
+                                </div>
+                            </div>
+                            <!-- End Quill -->
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-white" data-bs-dismiss="modal">Закрыть</button>
+                            <button type="button" class="btn btn-primary" onclick="atypicalOrder()">Сохранить заказ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Modal -->
+
+            <!-- Toast -->
+            <div id="liveToast" class="position-fixed toast hide" role="alert" aria-live="assertive" aria-atomic="true" style="top: 20px; right: 20px; z-index: 1000;">
+                <div class="toast-header">
+                    <div class="d-flex align-items-center flex-grow-1">
+                        <div class="flex-shrink-0">
+                            <img class="avatar avatar-sm avatar-circle" src="/dist/assets/svg/logos/logo-short.svg" alt="Logo" data-hs-theme-appearance="default">
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mb-0">Front</h5>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="toast-body" id="toast-text">Товар добавлен в корзину</div>
+            </div>
+            <!-- End Toast -->
+
+            <div class="content container">
+                <div class="row justify-content-lg-center">
+                    <div class="col-lg-9">
+                        <!-- Nav -->
+                        <div class="text-center">
+                            <ul class="nav nav-segment nav-pills mb-3" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="nav-one-eg1-tab" href="#nav-one-eg1" data-bs-toggle="pill" data-bs-target="#nav-one-eg1" role="tab" aria-controls="nav-one-eg1" aria-selected="true">Каталог</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="nav-two-eg1-tab" href="#nav-two-eg1" data-bs-toggle="modal" data-bs-target="#exampleModal" role="tab" aria-controls="nav-two-eg1" aria-selected="false">Нетиповой заказ</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- End Nav -->
+
+                        <div class="divider-center mb-3"></div>
+
+                        <!-- Tab Content -->
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="nav-one-eg1" role="tabpanel" aria-labelledby="nav-one-eg1-tab">
+                                <!-- Dropdown -->
+                                <div class="btn-group mb-3">
+                                    <button class="btn btn-ghost-primary dropdown-toggle" type="button" id="dropdownMenuButtonGhostPrimary" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Фильтр
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <form th:action="@{/customer}" method="get">
+                                            <!-- Form Check -->
+                                            <a class="dropdown-item">
+                                                <div class="form-check form-check form-switch">
+                                                    <input type="checkbox" name="detailCheck" id="detailCheck" class="form-check-input" th:checked="${detail_check != null}">
+                                                    <label class="form-check-label" for="detailCheck">Детали</label>
+                                                </div>
+                                            </a>
+                                            <!-- End Form Check -->
+
+                                            <!-- Form Check -->
+                                            <a class="dropdown-item">
+                                                <div class="form-check form-check form-switch">
+                                                    <input type="checkbox" name="itemCheck" id="itemCheck" class="form-check-input" th:checked="${item_check != null}">
+                                                    <label class="form-check-label" for="itemCheck">Составные изделия</label>
+                                                </div>
+                                            </a>
+                                            <!-- End Form Check -->
+
+                                            <a class="dropdown-item">
+                                                <button type="submit" class="btn btn-outline-primary">Применить</button>
+                                            </a>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!-- End Dropdown -->
+
+                                <!-- Card -->
+                                <div th:each="element : ${elements}" class="card mb-3" style="max-width: 540px;">
+                                    <div class="row no-gutters">
+                                        <div class="col-md-4">
+                                            <img class="img-fluid" src="/dist/assets/img/documentation/img8.jpg" alt="Card image cap">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <h5 class="card-title" th:text="${element.getName}"/>
+                                                <p class="card-text" th:text="${element.getDescribe}"/>
+                                                <p class="card-text">
+                                                    <button type="button" class="btn btn-outline-primary" th:id="${element.getClass.getSimpleName.toLowerCase} + '_' + ${element.getId}"
+                                                            onclick="doButton(this)" name="toastBtn">
+                                                        В корзину
+                                                    </button>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Card -->
+                            </div>
+
+                            <div class="tab-pane fade" id="nav-two-eg1" role="tabpanel" aria-labelledby="nav-two-eg1-tab">
+                                <p>Second tab content...</p>
+                            </div>
+                        </div>
+                        <!-- End Tab Content -->
+
+                        <div class="divider-center mb-1"></div>
+
+                        <!-- Pagination -->
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">«</span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </a>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">»</span>
+                                        <span class="visually-hidden">Next</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <!-- End Pagination -->
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer th:insert="~{partials/footer-front :: footer}"></footer>
+
+        <script src="/dist/assets/vendor/quill/dist/quill.js"></script>
+
+        <script>
+            (function() {
+                HSCore.components.HSQuill.init('.js-quill')
+            })();
+
+            const liveToast = new bootstrap.Toast(document.querySelector('#liveToast'))
+            let toastBtns = document.querySelectorAll('button[name=toastBtn]');
+
+            toastBtns.forEach(btn => btn.addEventListener('click', () => liveToast.show()));
+
+            async function doButton(element) {
+                let requestString = `type=${element.id.split('_')[0]}&id=${element.id.split('_')[1]}`;
+                await fetch(`customer/set_elements?${requestString}`, { method: 'GET' })
+                    .then(response => response.text()).then(element =>
+                        document.getElementById('toast-text').innerHTML =
+                            `Товар <b>${element}</b> добавлен в корзину`
+                    );
+            }
+
+            async function atypicalOrder() {
+                let quill = document.querySelector('.js-quill');
+                let content = quill.querySelector('.ql-editor').innerHTML;
+
+                await fetch('customer/set_details', {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json; charset=utf-8"
+                    },
+                    body: content
+                }).then(response => response.text()).then(status => {
+                    switch (status) {
+                        case 'true':
+                            document.getElementById('toast-text').innerHTML =
+                                "Нетиповой заказ добавлен в корзину и готов к оформлению";
+                            document.getElementById('close-btn').click();
+                            liveToast.show();
+                            break;
+                        case 'false':
+                            alert('Что-то пошло не так...');
+                            break;
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>

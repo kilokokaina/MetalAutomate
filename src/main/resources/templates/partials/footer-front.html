@@ -1,0 +1,22 @@
+<div th:fragment="footer">
+    <!-- JS Global Compulsory  -->
+    <script src="/dist/assets/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/dist/assets/vendor/jquery-migrate/dist/jquery-migrate.min.js"></script>
+    <script src="/dist/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JS Implementing Plugins -->
+    <script src="/dist/assets/vendor/hs-navbar-vertical-aside/dist/hs-navbar-vertical-aside.min.js"></script>
+    <script src="/dist/assets/vendor/hs-form-search/dist/hs-form-search.min.js"></script>
+
+    <!-- JS Front -->
+    <script src="/dist/assets/js/theme.min.js"></script>
+
+    <!-- JS Plugins Init. -->
+    <script>
+        (function() {
+            new HSSideNav('.js-navbar-vertical-aside').init()
+            new HSFormSearch('.js-form-search')
+            HSBsDropdown.init()
+        })()
+    </script>
+</div>

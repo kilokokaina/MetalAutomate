@@ -36,8 +36,13 @@ public class MainController {
     }
 
     @GetMapping
-    public String hello() {
+    public String main() {
         return "index";
+    }
+
+    @GetMapping("front")
+    public String frontTest() {
+        return "front";
     }
 
     @PostMapping("search")
@@ -55,16 +60,13 @@ public class MainController {
         return "result";
     }
 
-    @GetMapping("/get_context")
-    public @ResponseBody String getContext() {
-        return SecurityContextHolder.getContext().toString();
+    @PostMapping("auth")
+    public @ResponseBody String auth(@RequestBody CredentialsDTO credentialsDTO) {
+        return authenticationProvider.startSession(credentialsDTO);
     }
 
-    @PostMapping("/auth")
-    public @ResponseBody boolean auth(@RequestBody CredentialsDTO credentialsDTO) {
-        boolean loginResult = authenticationProvider.startSession(credentialsDTO);
-        log.info(SecurityContextHolder.getContext().toString());
-
-        return loginResult;
+    @GetMapping("get_context")
+    public @ResponseBody String getContext() {
+        return SecurityContextHolder.getContext().toString();
     }
 }

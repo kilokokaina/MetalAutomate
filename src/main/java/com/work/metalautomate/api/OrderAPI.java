@@ -45,4 +45,10 @@ public class OrderAPI {
 
         return "Статус заказа изменен";
     }
+
+    @GetMapping("accepted_list")
+    public @ResponseBody List<OrderModel> getAcceptedOrders() {
+        return orderService.findAll().stream().filter(order ->
+                order.getOrderStatus().name().equals("IN_WORK")).toList();
+    }
 }

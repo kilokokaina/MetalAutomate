@@ -25,13 +25,13 @@ public class AdminController {
     @GetMapping("admin")
     public String admin(Model model) {
         model.addAttribute("orderList", orderService.findAll());
-        return "admin";
+        return "orders";
     }
 
     @GetMapping("order/{id}")
     public String order(@PathVariable(value = "id") OrderModel orderModel, Model model) {
         model.addAttribute("statusList", OrderStatus.values());
         model.addAttribute("order", orderModel);
-        return "order";
+        return "test_order";
     }
 }

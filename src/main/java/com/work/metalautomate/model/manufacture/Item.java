@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @Entity
 @NoArgsConstructor
-public class Item {
+public class Item implements Element {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -30,6 +30,16 @@ public class Item {
         this.itemName = itemName;
         this.itemDescribe = itemDescribe;
         this.detailList = detailList;
+    }
+
+    @Override
+    public String getName() {
+        return getItemName();
+    }
+
+    @Override
+    public String getDescribe() {
+        return getItemDescribe();
     }
 
     @Override

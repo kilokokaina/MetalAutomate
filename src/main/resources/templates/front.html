@@ -1,0 +1,152 @@
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:insert="~{partials/head-front :: head}"></head>
+
+    <body class="has-navbar-vertical-aside navbar-vertical-aside-show-xl footer-offset">
+        <!-- Header -->
+        <header th:insert="~{partials/header-front :: header}"></header>
+        <!-- End Header -->
+
+        <main id="content" role="main" class="main">
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Вход</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Input Group -->
+                            <input type="text" id="login" class="form-control" placeholder="Логин" aria-label="Login">
+                            <div class="input-group input-group-merge mt-1" data-hs-validation-validate-class>
+                                <input type="password" class="js-toggle-password form-control form-control-lg" id="password" placeholder="Пароль" aria-label="Password"
+                                       data-hs-toggle-password-options='{
+                                         "target": "#changePassTarget",
+                                         "defaultClass": "bi-eye-slash",
+                                         "showClass": "bi-eye",
+                                         "classChangeTarget": "#changePassIcon"
+                                       }'>
+                                <a id="changePassTarget" class="input-group-append input-group-text" href="javascript:;">
+                                    <i id="changePassIcon" class="bi-eye"></i>
+                                </a>
+                            </div>
+                            <!-- End Input Group -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-white" data-bs-dismiss="modal">Закрыть</button>
+                            <button type="button" class="btn btn-primary" onclick="login()">Войти</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Modal -->
+
+            <aside th:insert="~{partials/aside-front :: aside}"></aside>
+
+            <div class="content container">
+                <div class="row justify-content-lg-center pt-lg-5 pt-xl-10">
+                    <div class="col-lg-9">
+                        <div class="text-center">
+                            <h1>Hello, World!</h1>
+
+                            <div class="w-md-50">
+                                <!-- Form -->
+                                <div class="mb-4">
+                                    <div class="input-group input-group-merge">
+                                        <input type="text" class="js-form-search form-control" placeholder="Поиск..."
+                                               data-hs-form-search-options='{
+                                                     "clearIcon": "#clearIconMenuEg",
+                                                     "defaultIcon": "#defaultIconMenuEg",
+                                                     "dropMenuElement": "#dropMenuEg",
+                                                     "dropMenuOffset": 20
+                                                   }'>
+                                        <button type="button" class="input-group-append input-group-text">
+                                            <i id="clearIconMenuEg" class="bi-x-lg" style="display: none;"></i>
+                                            <i id="defaultIconMenuEg" class="bi-search" style="display: none;"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- End Form -->
+
+                                <!-- Drop Menu -->
+                                <div id="dropMenuEg" class="hs-form-search-menu-content dropdown-menu dropdown-menu-form-search navbar-dropdown-menu-borderless">
+                                    <!-- Body -->
+                                    <div class="card-body-height">
+                                        <span class="dropdown-header">Результаты</span>
+
+                                        <a class="dropdown-item" href="#">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                            <span class="icon icon-soft-dark icon-xs icon-circle">
+                                                                <i class="bi-sliders"></i>
+                                                            </span>
+                                                </div>
+
+                                                <div class="flex-grow-1 text-truncate ms-2">
+                                                    <span>How to set up Gulp?</span>
+                                                </div>
+                                            </div>
+                                        </a>
+
+                                        <a class="dropdown-item" href="#">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                            <span class="icon icon-soft-dark icon-xs icon-circle">
+                                                                <i class="bi-paint-bucket"></i>
+                                                            </span>
+                                                </div>
+
+                                                <div class="flex-grow-1 text-truncate ms-2">
+                                                    <span>How to change theme color?</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- End Drop Menu -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Row -->
+            </div>
+        </main>
+        <script type="text/javascript">
+            async function login() {
+                let username = document.getElementById('login').value;
+                let password = document.getElementById('password').value;
+
+                let userData = {
+                    username: username,
+                    password: password
+                };
+
+                console.log(JSON.stringify(userData));
+
+                let response = await fetch('/auth', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json; charset=utf-8'
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                let result = await response.text();
+                alert(result);
+
+                if (result === 'true') location.reload();
+            }
+        </script>
+
+        <script src="/dist/assets/vendor/hs-toggle-password/dist/js/hs-toggle-password.js"></script>
+
+        <script>
+            (function() {
+                new HSTogglePassword('.js-toggle-password')
+            })();
+        </script>
+
+        <footer th:insert="~{partials/footer-front :: footer}"></footer>
+    </body>
+</html>

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
-public class Detail {
+public class Detail implements Element {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -21,6 +21,16 @@ public class Detail {
     public Detail(String detailName, String detailDescribe) {
         this.detailName = detailName;
         this.detailDescribe = detailDescribe;
+    }
+
+    @Override
+    public String getName() {
+        return getDetailName();
+    }
+
+    @Override
+    public String getDescribe() {
+        return getDetailDescribe();
     }
 
     @Override

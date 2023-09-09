@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <head th:insert="~{partials/head-front :: head}"></head>
+
+    <body class="has-navbar-vertical-aside navbar-vertical-aside-show-xl   footer-offset">
+        <header th:insert="~{partials/header-front :: header}"></header>
+
+        <aside th:insert="~{partials/aside-front :: aside}"></aside>
+
+        <main id="content" role="main" class="main">
+            <!-- Content -->
+            <div class="content container-fluid">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <div class="row align-items-center mb-3">
+                        <div class="col-sm">
+                            <h1 class="page-header-title">Заказы <span th:text="${orderList.size}" class="badge bg-soft-dark text-dark ms-2">106,905</span></h1>
+                        </div>
+                        <!-- End Col -->
+                    </div>
+                    <!-- End Row -->
+                </div>
+                <!-- End Page Header -->
+
+            <div class="row justify-content-end mb-3">
+                <div class="col-lg">
+                    <!-- Datatable Info -->
+                    <div id="datatableCounterInfo" style="display: none;">
+                        <div class="d-sm-flex justify-content-lg-end align-items-sm-center">
+                            <span class="d-block d-sm-inline-block fs-5 me-3 mb-2 mb-sm-0">
+                                <span id="datatableCounter">0</span>
+                                Selected
+                            </span>
+                            <a class="btn btn-outline-danger btn-sm mb-2 mb-sm-0 me-2" href="javascript:;">
+                                <i class="bi-trash"></i> Delete
+                            </a>
+                            <a class="btn btn-white btn-sm mb-2 mb-sm-0 me-2" href="javascript:;">
+                                <i class="bi-archive"></i> Archive
+                            </a>
+                            <a class="btn btn-white btn-sm mb-2 mb-sm-0 me-2" href="javascript:;">
+                                <i class="bi-upload"></i> Publish
+                            </a>
+                            <a class="btn btn-white btn-sm mb-2 mb-sm-0" href="javascript:;">
+                                <i class="bi-x-lg"></i> Unpublish
+                            </a>
+                        </div>
+                    </div>
+                    <!-- End Datatable Info -->
+                </div>
+                <!-- End Col -->
+            </div>
+            <!-- End Row -->
+
+            <!-- Card -->
+            <div class="card">
+                <!-- Header -->
+                <div class="card-header card-header-content-md-between">
+                    <div class="d-grid d-sm-flex gap-2"></div>
+                </div>
+                <!-- End Header -->
+
+                <!-- Table -->
+                <div class="table-responsive datatable-custom">
+                    <table id="datatable" class="table table-hover table-borderless table-thead-bordered table-nowrap table-align-middle card-table" style="width: 100%" data-hs-datatables-options='{
+                             "columnDefs": [{
+                                "targets": [0],
+                                "orderable": false
+                              }],
+                             "order": [],
+                             "info": {
+                               "totalQty": "#datatableWithPaginationInfoTotalQty"
+                             },
+                             "search": "#datatableSearch",
+                             "entries": "#datatableEntries",
+                             "pageLength": 12,
+                             "isResponsive": false,
+                             "isShowPaging": false,
+                             "pagination": "datatablePagination"
+                           }'>
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="table-column-pe-0">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="datatableCheckAll">
+                                        <label class="form-check-label" for="datatableCheckAll"></label>
+                                    </div>
+                                </th>
+                                <th class="table-column-ps-0">Заказ</th>
+                                <th>Дата</th>
+                                <th>Заказчик</th>
+                                <th>Статус оплаты</th>
+                                <th>Статус заказа</th>
+                                <th>Сумма</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr th:each="order : ${orderList}">
+                                <td class="table-column-pe-0">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="ordersCheck1">
+                                        <label class="form-check-label" for="ordersCheck1"></label>
+                                    </div>
+                                </td>
+                                <td class="table-column-ps-0">
+                                    <a th:href="'order/' + ${order.getOrderId}" th:text="'#' + ${order.getOrderId}"></a>
+                                </td>
+                                <td th:text="${order.getCreationDate}" />
+                                <td>
+                                    <a class="text-body" href="#">Jase Marley</a>
+                                </td>
+                                <td>
+                                    <span class="badge bg-soft-success text-success">
+                                        <span class="legend-indicator bg-success"></span>Оплачен
+                                    </span>
+                                </td>
+                                <td th:switch="${order.getOrderStatus.toString}">
+                                    <span th:case="'ACCEPTED'" class="badge bg-soft-secondary text-secondary">Принят</span>
+                                    <span th:case="'IN_WORK'" class="badge bg-soft-warning text-warning">В работе</span>
+                                    <span th:case="'DONE'" class="badge bg-soft-success text-success">Готов</span>
+                                </td>
+                                <td>$256.39</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a class="btn btn-white btn-sm" th:href="'order/' + ${order.getOrderId}">
+                                            <i class="bi-eye"></i> Просмотр
+                                        </a>
+
+                                        <!-- Button Group -->
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-white btn-icon btn-sm dropdown-toggle dropdown-toggle-empty" id="ordersExportDropdown1" data-bs-toggle="dropdown" aria-expanded="false"></button>
+
+                                            <div class="dropdown-menu dropdown-menu-end mt-1" aria-labelledby="ordersExportDropdown1">
+                                                <span class="dropdown-header">Статус</span>
+                                                <a class="js-export-copy dropdown-item" href="javascript:;">
+                                                    Принят
+                                                </a>
+                                                <a class="js-export-print dropdown-item" href="javascript:;">
+                                                    В работе
+                                                </a>
+                                                <a class="js-export-copy dropdown-item" href="javascript:;">
+                                                    Готов
+                                                </a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item" href="javascript:;">
+                                                    <i class="bi-trash dropdown-item-icon"></i> Удалить
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <!-- End Unfold -->
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- End Table -->
+
+                <!-- Footer -->
+                <div class="card-footer">
+                </div>
+                <!-- End Footer -->
+            </div>
+            <!-- End Card -->
+          </div>
+          <!-- End Content -->
+        </main>
+        <script src="/dist/assets/vendor/datatables/media/js/jquery.dataTables.min.js"></script>
+        <script src="/dist/assets/vendor/datatables.net.extensions/select/select.min.js"></script>
+
+        <footer th:insert="~{partials/footer-front :: footer}"></footer>
+    </body>
+</html>
