@@ -38,6 +38,8 @@ public class CustomerController {
                           Model model) {
         List<Element> elementList = new ArrayList<>();
 
+        log.info(Thread.currentThread().getName());
+
         if (detailCheck != null) elementList.addAll(detailService.detailRepository.findAll());
         if (itemCheck != null) elementList.addAll(itemService.itemRepository.findAll());
 
@@ -49,43 +51,21 @@ public class CustomerController {
     }
 
     @GetMapping("set_elements")
-    public @ResponseBody String setToOrder(@RequestParam String type, @RequestParam Long id) {
-        switch (type) {
-            case "item" -> {
-                List<Item> itemList = globalOrder.getItemList();
-                Item item = itemService.findById(id);
+    public @ResponseBody String setToOrder(@RequestParam Long id) {
+        List<Detail> detailList = globalOrder.getDetailList();
+        Detail detail = detailService.findById(id);
 
-                if (itemList != null) {
-                    itemList.add(item);
-                    globalOrder.setItemList(itemList);
-                } else {
-                    List<Item> newItemList = new ArrayList<>();
-                    newItemList.add(item);
+        if (detailList != null) {
+            detailList.add(detail);
+            globalOrder.setDetailList(detailList);
+        } else {
+            List<Detail> newDetailList = new ArrayList<>();
+            newDetailList.add(detail);
 
-                    globalOrder.setItemList(newItemList);
-                }
-
-                return item.getItemName();
-            }
-            case "detail" -> {
-                List<Detail> detailList = globalOrder.getDetailList();
-                Detail detail = detailService.findById(id);
-
-                if (detailList != null) {
-                    detailList.add(detail);
-                    globalOrder.setDetailList(detailList);
-                } else {
-                    List<Detail> newDetailList = new ArrayList<>();
-                    newDetailList.add(detail);
-
-                    globalOrder.setDetailList(newDetailList);
-                }
-
-                return detail.getDetailName();
-            }
+            globalOrder.setDetailList(newDetailList);
         }
 
-        return "Something went wrong";
+        return detail.getDetailName();
     }
 
     @PostMapping("set_details")

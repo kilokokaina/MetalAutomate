@@ -4,6 +4,9 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no">
 
+        <meta name="apple-mobile-web-app-status-bar" content="#1e2022">
+        <meta name="theme-color" content="#1e2022">
+
         <title>Front Test</title>
 
         <link rel="shortcut icon" href="/dist/favicon.ico">
@@ -19,7 +22,7 @@
             <div class="container">
                 <div class="navbar-nav-wrap">
                     <!-- Logo -->
-                    <a class="navbar-brand" th:href="@{/customer?detailCheck=on&itemCheck=on}" aria-label="Front">
+                    <a class="navbar-brand" th:href="@{/}" aria-label="Front">
                         <img class="navbar-brand-logo" src="/dist/assets/svg/logos/logo.svg" alt="Logo" data-hs-theme-appearance="default">
                     </a>
                     <!-- End Logo -->
@@ -209,8 +212,13 @@
                 </div>
             </div>
         </main>
-        <footer th:insert="~{partials/footer-front :: footer}"></footer>
+        <!-- JS Global Compulsory  -->
+        <script src="/dist/assets/vendor/jquery/dist/jquery.min.js"></script>
+        <script src="/dist/assets/vendor/jquery-migrate/dist/jquery-migrate.min.js"></script>
+        <script src="/dist/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
+        <!-- JS Front -->
+        <script src="/dist/assets/js/theme.min.js"></script>
         <script src="/dist/assets/vendor/quill/dist/quill.js"></script>
 
         <script>
@@ -224,7 +232,7 @@
             toastBtns.forEach(btn => btn.addEventListener('click', () => liveToast.show()));
 
             async function doButton(element) {
-                let requestString = `type=${element.id.split('_')[0]}&id=${element.id.split('_')[1]}`;
+                let requestString = `id=${element.id.split('_')[1]}`;
                 await fetch(`customer/set_elements?${requestString}`, { method: 'GET' })
                     .then(response => response.text()).then(element =>
                         document.getElementById('toast-text').innerHTML =

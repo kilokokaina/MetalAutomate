@@ -1,0 +1,157 @@
+<html lang="ru" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:insert="~{partials/head-front :: head}"></head>
+
+<body class="has-navbar-vertical-aside navbar-vertical-aside-show-xl footer-offset" onload="connect()">
+<!-- Header -->
+<header th:insert="~{partials/header-front :: header}"></header>
+<!-- End Header -->
+
+<main id="content" role="main" class="main">
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Вход</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Input Group -->
+          <input type="text" id="login" class="form-control" placeholder="Логин" aria-label="Login">
+          <div class="input-group input-group-merge mt-1" data-hs-validation-validate-class>
+            <input type="password" class="js-toggle-password form-control form-control-lg" id="password" placeholder="Пароль" aria-label="Password"
+                   data-hs-toggle-password-options='{
+                                         "target": "#changePassTarget",
+                                         "defaultClass": "bi-eye-slash",
+                                         "showClass": "bi-eye",
+                                         "classChangeTarget": "#changePassIcon"
+                                       }'>
+            <a id="changePassTarget" class="input-group-append input-group-text" href="javascript:;">
+              <i id="changePassIcon" class="bi-eye"></i>
+            </a>
+          </div>
+          <!-- End Input Group -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-white" data-bs-dismiss="modal">Закрыть</button>
+          <button type="button" class="btn btn-primary" onclick="login()">Войти</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modal -->
+
+  <aside th:insert="~{partials/aside-front :: aside}"></aside>
+
+  <div class="content container">
+    <div class="row justify-content-lg-center pt-lg-5 pt-xl-10">
+      <div class="col-lg-9">
+        <div class="text-center">
+          <br />
+          <div id="conversationDiv">
+            <input type="text" id="text" placeholder="Write a message..."/>
+            <input type="text" id="to" placeholder="Choose destination"/>
+            <button class="btn btn-primary" id="sendMessage" onclick="sendMessage();">Отправить</button>
+            <p id="response"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Row -->
+  </div>
+</main>
+<script type="text/javascript">
+  async function login() {
+    let username = document.getElementById('login').value;
+    let password = document.getElementById('password').value;
+
+    let userData = {
+      username: username,
+      password: password
+    };
+
+    console.log(JSON.stringify(userData));
+
+    let response = await fetch('/auth', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8'
+      },
+      body: JSON.stringify(userData)
+    });
+
+    let result = await response.text();
+
+    switch (result) {
+      case 'true':
+        location.reload();
+        alert(`Пользователь ${username} аутентифицирован`);
+        break;
+      case 'false':
+        alert('Что-то пошло не так');
+        break;
+    }
+  }
+</script>
+
+<script src="/dist/assets/vendor/hs-toggle-password/dist/js/hs-toggle-password.js"></script>
+
+<script>
+  (function() {
+    new HSTogglePassword('.js-toggle-password')
+  })();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script th:inline="javascript" type="text/javascript">
+  let stompClient = null;
+  let username = [[${#authentication.getName()}]]
+
+  function setConnected(connected) {
+    document.getElementById('conversationDiv').style.visibility
+            = connected ? 'visible' : 'hidden';
+    document.getElementById('response').innerHTML = '';
+  }
+
+  function connect() {
+    let socket = new SockJS('/chat');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function(frame) {
+      setConnected(true);
+      console.log('Connected: ' + frame);
+      stompClient.subscribe(`/topic/message/${username}`, function(messageOutput) {
+        showMessageOutput(JSON.parse(messageOutput.body));
+      });
+    });
+  }
+
+  function disconnect() {
+    if(stompClient != null) {
+      stompClient.disconnect();
+    }
+    setConnected(false);
+    console.log("Disconnected");
+  }
+
+  function sendMessage() {
+    let to = document.getElementById('to').value;
+    let text = document.getElementById('text').value;
+    stompClient.send("/app/chat", {},
+            JSON.stringify({'from':username, 'to':to, 'text':text}));
+  }
+
+  function showMessageOutput(messageOutput) {
+    let response = document.getElementById('response');
+    let p = document.createElement('p');
+    p.style.wordWrap = 'break-word';
+    p.appendChild(document.createTextNode(messageOutput.from + ": "
+            + messageOutput.text + " (" + messageOutput.time + ")"));
+    response.appendChild(p);
+  }
+</script>
+
+<footer th:insert="~{partials/footer-front :: footer}"></footer>
+</body>
+</html>

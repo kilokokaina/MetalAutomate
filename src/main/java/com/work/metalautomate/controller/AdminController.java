@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Slf4j
 @Controller
-@PreAuthorize("hasAuthority('ADMIN')")
 public class AdminController {
     private final OrderServiceImpl orderService;
 

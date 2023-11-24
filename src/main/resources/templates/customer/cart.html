@@ -4,6 +4,9 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no">
 
+        <meta name="apple-mobile-web-app-status-bar" content="#1e2022">
+        <meta name="theme-color" content="#1e2022">
+
         <title>Front Test</title>
 
         <link rel="shortcut icon" href="/dist/favicon.ico">
@@ -98,7 +101,7 @@
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="nav-one-eg1" role="tabpanel" aria-labelledby="nav-one-eg1-tab">
                         <!-- Card -->
-                        <div th:each="element : ${order.getElementList()}" class="card mb-1" style="max-width: 20rem;">
+                        <div th:each="element : ${order.getDetailList()}" class="card mb-1" style="max-width: 20rem;">
                             <div class="card-body">
                                 <div th:switch="${element.getClass().getSimpleName()}">
                                     <span th:case="'Detail'">Деталь</span>
@@ -153,7 +156,7 @@
                         </div>
                         <!-- End Card -->
 
-                        <button class="js-go-to position-fixed btn btn-primary" style="right: 2rem; bottom: 2rem;"
+                        <button id="goToCustomer" class="js-go-to position-fixed btn btn-primary" style="right: 2rem; bottom: 2rem;"
                                 data-hs-go-to-options='{
                             "isReferencedToOtherPage": 700
                             "offsetTop": 700,
@@ -195,6 +198,9 @@
                         <div class="mb-3">
                             <label for="PhoneNumberLabel" class="form-label">Телефон</label>
                             <div class="input-group input-group-merge input-group-light">
+                                <div class="input-group-prepend input-group-text" id="inputGroupLightPhoneAddOn">
+                                    <i class="bi bi-telephone"></i>
+                                </div>
                                 <input type="text" class="js-input-mask form-control" id="PhoneNumberLabel" placeholder="+x(xxx)xxx-xx-xx"
                                        data-hs-mask-options='{
                                   "mask": "+0(000)000-00-00"
@@ -215,6 +221,26 @@
                             </div>
                         </div>
                         <!-- End Input Group -->
+
+                        <div class="mb-3">
+                            <label for="inputGroupLightEmail" class="form-label">Файлы</label>
+
+                            <div class="input-group input-group-merge input-group-light">
+                                <!-- Dropzone -->
+                                <div id="basicExampleDropzone" class="js-dropzone row dz-dropzone dz-dropzone-card">
+                                    <div class="dz-message">
+                                        <img class="avatar avatar-xl avatar-4x3 mb-3" src="/dist/assets/svg/illustrations/oc-browse.svg" alt="Image Description">
+
+                                        <h5>Перетащите файл сюда</h5>
+
+                                        <p class="mb-2">или</p>
+
+                                        <span class="btn btn-white btn-sm">Найти файл</span>
+                                    </div>
+                                </div>
+                                <!-- End Dropzone -->
+                            </div>
+                        </div>
 
                         <button class="js-go-to position-fixed btn btn-primary" style="right: 2rem; bottom: 2rem;"
                                 data-hs-go-to-options='{
@@ -244,29 +270,28 @@
 
         <script src="/dist/assets/vendor/quill/dist/quill.min.js"></script>
         <script src="/dist/assets/vendor/hs-quantity-counter/dist/hs-quantity-counter.min.js"></script>
+        <script src="/dist/assets/vendor/dropzone/dist/min/dropzone.min.js"></script>
         <script src="/dist/assets/vendor/hs-go-to/dist/hs-go-to.min.js"></script>
         <script src="/dist/assets/vendor/imask/dist/imask.min.js"></script>
 
         <script>
+            let cartTab = document.getElementById('nav-one-eg1');
+            let customerTab = document.getElementById('nav-two-eg1');
+
             (function() {
                 HSCore.components.HSQuill.init('.js-quill');
-                HSCore.components.HSMask.init('.js-input-mask')
+                HSCore.components.HSMask.init('.js-input-mask');
+                HSCore.components.HSDropzone.init('.js-dropzone');
                 new HSQuantityCounter('.js-quantity-counter');
                 new HSGoTo('.js-go-to');
-            })();
+            }) ();
 
             function goToCartPage() {
-                let cartTab = document.getElementById('nav-one-eg1');
-                let customerTab = document.getElementById('nav-two-eg1');
-
                 cartTab.setAttribute('class', 'tab-pane fade show active');
                 customerTab.setAttribute('class', 'tab-pane fade show');
             }
 
             function goToCustomerPage() {
-                let cartTab = document.getElementById('nav-one-eg1');
-                let customerTab = document.getElementById('nav-two-eg1');
-
                 cartTab.setAttribute('class', 'tab-pane fade show');
                 customerTab.setAttribute('class', 'tab-pane fade show active');
             }

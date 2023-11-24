@@ -26,7 +26,6 @@ public class OrderAPI {
         OrderModel orderModel = new OrderModel();
 
         orderModel.setDetailList(List.of(orderDTO.getDetailList()));
-        orderModel.setItemList(List.of(orderDTO.getItemList()));
         orderModel.setOrderText(orderDTO.getOrderDetails());
         orderModel.setOrderStatus(OrderStatus.ACCEPTED);
 

@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configurers.LogoutConf
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.context.WebApplicationContext;
 
 @Configuration
@@ -40,9 +41,9 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeHttpRequests((request) -> request
-                        .requestMatchers("/", "/logout", "/auth", "/get_context",
+                        .requestMatchers("/", "/logout", "/auth", "/reg", "/get_context",
                                 "/dist/**", "/img/**", "/js/**", "/style/**", "/front",
-                                "/customer/**").permitAll()
+                                "/customer/**", "manifest.json").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )

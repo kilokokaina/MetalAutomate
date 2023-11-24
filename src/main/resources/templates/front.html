@@ -1,4 +1,4 @@
-<html xmlns:th="https://www.thymeleaf.org"
+<html lang="ru" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
     <head th:insert="~{partials/head-front :: head}"></head>
 
@@ -48,64 +48,9 @@
                 <div class="row justify-content-lg-center pt-lg-5 pt-xl-10">
                     <div class="col-lg-9">
                         <div class="text-center">
-                            <h1>Hello, World!</h1>
-
-                            <div class="w-md-50">
-                                <!-- Form -->
-                                <div class="mb-4">
-                                    <div class="input-group input-group-merge">
-                                        <input type="text" class="js-form-search form-control" placeholder="Поиск..."
-                                               data-hs-form-search-options='{
-                                                     "clearIcon": "#clearIconMenuEg",
-                                                     "defaultIcon": "#defaultIconMenuEg",
-                                                     "dropMenuElement": "#dropMenuEg",
-                                                     "dropMenuOffset": 20
-                                                   }'>
-                                        <button type="button" class="input-group-append input-group-text">
-                                            <i id="clearIconMenuEg" class="bi-x-lg" style="display: none;"></i>
-                                            <i id="defaultIconMenuEg" class="bi-search" style="display: none;"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <!-- End Form -->
-
-                                <!-- Drop Menu -->
-                                <div id="dropMenuEg" class="hs-form-search-menu-content dropdown-menu dropdown-menu-form-search navbar-dropdown-menu-borderless">
-                                    <!-- Body -->
-                                    <div class="card-body-height">
-                                        <span class="dropdown-header">Результаты</span>
-
-                                        <a class="dropdown-item" href="#">
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0">
-                                                            <span class="icon icon-soft-dark icon-xs icon-circle">
-                                                                <i class="bi-sliders"></i>
-                                                            </span>
-                                                </div>
-
-                                                <div class="flex-grow-1 text-truncate ms-2">
-                                                    <span>How to set up Gulp?</span>
-                                                </div>
-                                            </div>
-                                        </a>
-
-                                        <a class="dropdown-item" href="#">
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-shrink-0">
-                                                            <span class="icon icon-soft-dark icon-xs icon-circle">
-                                                                <i class="bi-paint-bucket"></i>
-                                                            </span>
-                                                </div>
-
-                                                <div class="flex-grow-1 text-truncate ms-2">
-                                                    <span>How to change theme color?</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                                <!-- End Drop Menu -->
-                            </div>
+                            <h1>
+                                <a th:href="@{/customer?detailCheck=on&itemCheck=on}">Каталог</a>
+                            </h1>
                         </div>
                     </div>
                 </div>
@@ -133,9 +78,16 @@
                 });
 
                 let result = await response.text();
-                alert(result);
 
-                if (result === 'true') location.reload();
+                switch (result) {
+                    case 'true':
+                        location.reload();
+                        alert(`Пользователь ${username} аутентифицирован`);
+                        break;
+                    case 'false':
+                        alert('Что-то пошло не так');
+                        break;
+                }
             }
         </script>
 
@@ -146,6 +98,8 @@
                 new HSTogglePassword('.js-toggle-password')
             })();
         </script>
+
+<!--        <script src="/js/index.js"></script>-->
 
         <footer th:insert="~{partials/footer-front :: footer}"></footer>
     </body>
